@@ -11,7 +11,9 @@ import SwiftUI
 struct TechTest_InstagramStories_likeApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            StoryListView(
+                viewModel: DI.shared.makeStoryListViewModel()
+            )
         }
     }
 }
