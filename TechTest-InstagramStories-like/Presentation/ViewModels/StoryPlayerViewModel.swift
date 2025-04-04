@@ -13,9 +13,11 @@ final class StoryPlayerViewModel: ObservableObject {
     private var stories: [Story]
     private var currentIndex: Int = 0
     private var timer: Timer?
+    private let persistence: StoryPersistenceProtocol
     
-    init(stories: [Story], initialStoryId: String) {
+    init(stories: [Story], initialStoryId: String, persistence: StoryPersistenceProtocol) {
         self.stories = stories
+        self.persistence = persistence
         
         if let index = stories.firstIndex(where: { $0.id == initialStoryId }) {
             self.currentIndex = index
@@ -45,6 +47,7 @@ final class StoryPlayerViewModel: ObservableObject {
         var story = stories[index]
         if !story.isSeen {
             story.isSeen = true
+            persistence.updateStoryState(story)
         }
         currentStory = story
         stories[index] = story
@@ -80,5 +83,6 @@ final class StoryPlayerViewModel: ObservableObject {
         story.isLiked.toggle()
         currentStory = story
         stories[currentIndex] = story
+        persistence.updateStoryState(story)
     }
 }

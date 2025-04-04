@@ -12,7 +12,7 @@ final class StoryListViewModel: ObservableObject {
     @Published var selectedStory: Story? = nil
     
     private let service: StoryServiceProtocol
-    private let persistence: StoryPersistenceProtocol
+    let persistence: StoryPersistenceProtocol
     private var users: [User] = []
     
     init(service: StoryServiceProtocol,
@@ -22,6 +22,7 @@ final class StoryListViewModel: ObservableObject {
     }
     
     func loadInitialData() {
+        
         guard displayStories.isEmpty else { return }
         guard let userResponseDTO = service.loadUsers() else {
             return
@@ -37,10 +38,17 @@ final class StoryListViewModel: ObservableObject {
         
         displayStories = allStories.map { story in
             if let persisted = persistedStories.first(where: { $0.id == story.id }) {
-                return persisted
+                return Story(
+                    id: story.id,
+                    user: story.user,
+                    imageURL: story.imageURL,
+                    isSeen: persisted.isSeen,
+                    isLiked: persisted.isLiked
+                )
             }
             return story
         }
+
     }
     
     func didSelectStory(_ story: Story) {

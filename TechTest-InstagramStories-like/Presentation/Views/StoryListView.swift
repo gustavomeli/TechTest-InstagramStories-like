@@ -54,7 +54,8 @@ struct StoryListView: View {
                 StoryPlayerView(
                     viewModel: StoryPlayerViewModel(
                         stories: viewModel.displayStories,
-                        initialStoryId: selected.id
+                        initialStoryId: selected.id,
+                        persistence: viewModel.persistence
                     )
                 )
             }
